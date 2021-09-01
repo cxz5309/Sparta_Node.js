@@ -1,18 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const User = require("./models/user.js");
-const Goods = require("./models/goods");
-const Cart = require("./models/cart");
+const {Op} = require('sequelize');
+const {User, Cart, Goods} = require("./models");
 const authMiddleware = require("./middlewares/auth-middleware");
-
-mongoose.connect("mongodb://localhost/shopping-demo", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
 
 const app = express();
 const router = express.Router();
@@ -40,8 +31,10 @@ router.post("/users", async (req, res) => {
       return;
     }
 
-    const existUsers = await User.find({
-      $or: [{ email }, { nickname }],
+    const existUsers = await User.findAll({
+      where: {
+        [Op.or] : [{nickname}, {email}],
+      },
     });
     if (existUsers.length) {
       res.status(400).send({
@@ -50,8 +43,7 @@ router.post("/users", async (req, res) => {
       return;
     }
 
-    const user = new User({ email, nickname, password });
-    await user.save();
+    await User.create({ email, nickname, password });
 
     res.status(201).send({});
   } catch (err) {
@@ -66,11 +58,12 @@ const postAuthSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
+
 router.post("/auth", async (req, res) => {
   try {
     const { email, password } = await postAuthSchema.validateAsync(req.body);
 
-    const user = await User.findOne({ email, password }).exec();
+    const user = await User.findOne({ where:{email, password} });
 
     if (!user) {
       res.status(400).send({
@@ -104,19 +97,19 @@ router.get("/users/me", authMiddleware, async (req, res) => {
 router.get("/goods/cart", authMiddleware, async (req, res) => {
   const { userId } = res.locals.user;
 
-  const cart = await Cart.find({
-    userId,
-  }).exec();
+  const cart = await Cart.findAll({
+    where:{userId,
+    }
+  });
 
   const goodsIds = cart.map((c) => c.goodsId);
 
   // 루프 줄이기 위해 Mapping 가능한 객체로 만든것
-  const goodsKeyById = await Goods.find({
+  const goodsKeyById = await Goods.findAll({
     where: {
       goodsId: goodsIds,
     },
   })
-    .exec()
     .then((goods) =>
       goods.reduce(
         (prev, g) => ({
@@ -145,20 +138,21 @@ router.put("/goods/:goodsId/cart", authMiddleware, async (req, res) => {
   const { quantity } = req.body;
 
   const existsCart = await Cart.findOne({
-    userId,
-    goodsId,
-  }).exec();
+    where:{
+      userId,
+      goodsId,
+    }
+  });
 
   if (existsCart) {
     existsCart.quantity = quantity;
     await existsCart.save();
   } else {
-    const cart = new Cart({
+    await Cart.create({
       userId,
       goodsId,
       quantity,
     });
-    await cart.save();
   }
 
   // NOTE: 성공했을때 딱히 정해진 응답 값이 없다.
@@ -173,13 +167,15 @@ router.delete("/goods/:goodsId/cart", authMiddleware, async (req, res) => {
   const { goodsId } = req.params;
 
   const existsCart = await Cart.findOne({
-    userId,
-    goodsId,
-  }).exec();
+    where:{
+      userId,
+      goodsId,
+    }
+  });
 
   // 있든 말든 신경 안쓴다. 그냥 있으면 지운다.
   if (existsCart) {
-    await existsCart.delete().exec();
+    await existsCart.destroy();
   }
 
   // NOTE: 성공했을때 딱히 정해진 응답 값이 없다.
@@ -194,11 +190,14 @@ router.delete("/goods/:goodsId/cart", authMiddleware, async (req, res) => {
  * /api/goods?category=drink
  * /api/goods?category=drink2
  */
-router.get("/goods", authMiddleware, async (req, res) => {
+ router.get("/goods", authMiddleware, async (req, res) => {
   const { category } = req.query;
-  const goods = await Goods.find(category ? { category } : undefined)
-    .sort("-date")
-    .exec();
+
+  const goods = await Goods.findAll({
+    order: [["goodsId", "DESC"]],
+    where: category ? { category } : undefined,
+  })
+  console.log(goods);
 
   res.send({ goods });
 });
@@ -208,7 +207,7 @@ router.get("/goods", authMiddleware, async (req, res) => {
  */
 router.get("/goods/:goodsId", authMiddleware, async (req, res) => {
   const { goodsId } = req.params;
-  const goods = await Goods.findById(goodsId).exec();
+  const goods = await Goods.findByPk(goodsId);
 
   if (!goods) {
     res.status(404).send({});
