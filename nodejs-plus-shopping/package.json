@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "node": "nodemon node app.js"
+    "node": "nodemon node server.js",
+    "prettify": "prettier --write *.js **/*.js"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +18,11 @@
     "mongoose": "^5.13.7",
     "mysql2": "^2.3.0",
     "nodemon": "^2.0.12",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "socket.io": "^4.2.0"
   },
   "devDependencies": {
+    "prettier": "^2.3.2",
     "sequelize-cli": "^6.2.0"
   }
 }
