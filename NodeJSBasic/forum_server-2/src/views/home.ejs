@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="js/utils.js"></script>
+    <title>Pug</title>
+  </head>
+  <body>
+    <h1>Pug - node template engine</h1>
+    <div class="col" id="container">
+      <p>You are amazing</p>
+      <p>
+        Pug is a terse and simple
+        templating language with a
+        strong focus on performance
+        and powerful features.
+      </p>
+    </div>
+    <input type="button" value="게시글 생성" onclick="location.href='/create_post'">
+    <ul>
+      <% for(var i = 0; i < popularPosts.length; i++){%>
+        <div class="post">
+          <h1 onclick=location.href='read_post/<%= popularPosts[i]._id %>'>제목: <%= popularPosts[i].title %></h1>
+          <h2>작성자명: <%= popularPosts[i].userName %></h2>
+          <h2>내용: <%= popularPosts[i].description %></h2>
+          <h3>작성 날짜: <%= popularPosts[i].date %></h3>
+        </div>
+      <%}%>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+
+h1{
+  border: solid;
+}
+
+.post{
+  border: solid red;
+}
+
+#container{
+  border: 2px dotted;
+}
+
+div{
+  border: solid 10px blue;
+}
+
+.error{
+  background-color: red;
+}
+.info{
+  background-color: green;
+}
+.success{
+  background-color: blue;
+}

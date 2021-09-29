@@ -1,0 +1,13 @@
+<div class="content-header">
+  <h1 class="read-title"><%= content.title %></h1>
+  <div class="read-info row">
+    <div class="created-date col-3"><%= content.date %></div>
+    <div class="writer col-9"><%= content.userName %></div>
+  </div>
+</div>
+<div class="read-content">
+  <div class="desc">
+    <%= content.description %>
+  </div>
+</div>
+<div class="btn"><input type="submit" onclick=location.href='/update-post/<%= content._id %>' value="게시글 수정"></div>

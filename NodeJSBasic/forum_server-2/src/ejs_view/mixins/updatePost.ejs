@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>Pug</title>
+  </head>
+  <body>
+    <% if (messages.error) { %> 
+      <div class="error"><span><%= messages.error $></span></div>
+    <% } %>
+    <% if (messages.info) { %> 
+      <div class="info"><span><%= messages.info $></span></div>
+    <% } %>
+    <% if (messages.success) { %> 
+      <div class="success"><span><%= messages.success $></span></div>
+    <% } %>
+  <form class="newPost" method="post">
+    <input type="text" name="title" placeholder="제목" value=""/>
+    <input type="text" name="userName" placeholder="작성자명" value=""/>
+    <input type="text" name="userPwd" placeholder="비밀번호" value=""/>
+    <input type="text" name="description" placeholder="내용" value=""/>
+    <input type="text" name="id" value=""/>
+    <% if (messages.success) 
+    { %> <input id="create_and_home" type="submit" value="생성" formaction="/"/><% }
+      else 
+      {%><div class ="small_circle_grid" style="background-color: red"> </div><%}
+    %>
+    <input id="update_and_home" type="submit" value="수정" formaction="/update_post"/>
+    <input id="delete_and_home" type="submit" value="삭제" formaction="/delete_post"/>
+  </form>
+  </body>
+</html>

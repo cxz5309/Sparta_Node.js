@@ -1,0 +1,22 @@
+<div class="popular-post-box">
+  <div class="popular-header row">
+    <div class="title col-10">Popular post</div>
+    <a href='/list-post' class="view-all col-2">View all</a>
+  </div>
+  <div class="contents-box row">
+    <% for(var i = 0; i < popularPosts.length; i++){%>
+      <article onclick=location.href='read-post/<%= popularPosts[i]._id %>'>
+        <div class="popular-content">
+          <div class="popular-title"><%= popularPosts[i].title %></div>
+          <div class="popular-info row">
+            <div class="created-date col-4"><%= popularPosts[i].date %></div>
+            <div class="writer col-8"><%= popularPosts[i].userName %></div>
+          </div>
+          <div class="popular-desc">
+            <p><%= popularPosts[i].description %></p>
+          </div>
+        </div>
+      </article>
+    <%}%>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+include mixins/newPost
+include mixins/message
+include mixins/header
+
+doctype html
+html(lang='en')
+  +header()
+  body
+    if messages.error 
+      +message("error", messages.error)
+    if messages.info
+      +message("info", messages.info)
+    if messages.success
+      +message("sucess", messages.success)
+    +newPost('update_post', postContent)

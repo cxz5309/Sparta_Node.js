@@ -1,0 +1,42 @@
+{
+  "name": "forum",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js --delay 1",
+    "start": "nodemon src/index.js --delay 1",
+    "build": "babel src -d dist",
+    "start2": "babel-node src/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "babel-cli": "^6.26.0",
+    "bcrypt": "^5.0.1",
+    "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "iconv-lite": "^0.6.3",
+    "mongoose": "^6.0.7",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.3",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "nodemon": "^2.0.12"
+  }
+}

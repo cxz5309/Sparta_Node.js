@@ -1,0 +1,10 @@
+mixin post(postContent)
+  div.post
+    h1(onclick=`location.href="/read_post/${postContent._id}"`) 제목: #{postContent.title}
+    h2 작성자명: #{postContent.userName}
+    h2 내용: #{postContent.description}
+    h3 작성 날짜: #{postContent.date}
+
+        
+      
+       

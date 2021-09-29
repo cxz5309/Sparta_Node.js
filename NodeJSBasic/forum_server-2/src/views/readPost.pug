@@ -1,0 +1,9 @@
+include mixins/post
+include mixins/header
+
+doctype html
+html(lang='en')
+  +header()
+  body
+    +post(postContent)
+    input#update_post(type="button" value="게시글 수정" onclick=`location.href="/update_post/${postContent._id}"`)
