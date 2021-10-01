@@ -1,5 +1,6 @@
 const express = require('express')
 const Http = require('http')
+const socketIo = require('socket.io');
 const Joi = require('joi')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
@@ -8,9 +9,15 @@ const authMiddleware = require('./middlewares/auth-middleware')
 
 const app = express()
 const http = Http.createServer(app)
+const io = socketIo(http);
 const router = express.Router()
 
-
+io.on('connection', (socket)=>{
+  console.log('누군가 연결했어요!');
+  socket.on('disconnect', ()=>{
+    console.log('누군가 연결을 끊었어요!');
+  })
+})
 
 const postUsersSchema = Joi.object({
   nickname: Joi.string().required(),

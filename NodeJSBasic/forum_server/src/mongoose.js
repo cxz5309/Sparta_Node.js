@@ -16,7 +16,10 @@ const mongoConnect = async () => {
     })
     .then(
       console.log('몽고디비 연결!'),
-    );
+  );
+  mongoose.connection.on('connect', ()=>{
+    console.error("몯고비디 연결!")
+  })
 };
 
 export default mongoConnect;
