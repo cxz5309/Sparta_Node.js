@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
-const postSchema = new Schema({
+const PostSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -21,7 +21,7 @@ const postSchema = new Schema({
     type: String
   },
   date: {
-    type: String,
+    type: Date,
     required: true
   },
   views: {
@@ -29,4 +29,11 @@ const postSchema = new Schema({
   }
 });
 
-export default mongoose.model('Post', postSchema);
+PostSchema.virtual('uid').get(function () {
+  return this._id.toHexString();
+});
+PostSchema.set('toJSON', {
+  virtuals: true
+});
+
+export default mongoose.model('Post', PostSchema);
